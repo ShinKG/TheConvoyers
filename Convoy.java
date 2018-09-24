@@ -33,15 +33,16 @@ class State{
     private Queue<Car> cars;
     private int maxWeight,length;
     private double time;
-    private String Description;
+    private String description;
     private State parent;
 
-    public State(Queue<Car> cs,int mw,int lth,double t,String d){
+    public State(Queue<Car> cs,int mw,int lth,double t,String d,State p){
         this.cars = cs;
         this.maxWeight = mw;
         this.length = lth;
         this.time = t;// this is hour, will be converted by adding 60 when it is printed out
-        this.Description = d;
+        this.description = d;
+        this.parent = p;
     }
 
     public State getParent(){
@@ -75,9 +76,10 @@ class State{
             }
 
             //preprcss
-            double time += (double)this.length/slow;// length divided by speed is time in h this will be
+            double timetook = time;
+            timetook += (double)this.length/slow;// length divided by speed is time in h this will be
 
-            successors.add(new State(this.cars,this.maxWeight,this.length,time,des));
+            successors.add(new State(this.cars,this.maxWeight,this.length,timetook,des,this()));
             }
 
             return successors;
