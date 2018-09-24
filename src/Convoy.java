@@ -121,7 +121,7 @@ class State{
         return parent;
     }
 
-    public ArrayList<State> extend(){
+    public ArrayList<State> expand(){
         ArrayList<Car> group = new ArrayList<>();
         ArrayList<State> successors= new ArrayList<>();
         int currentWeight = 0; Car currentCar;
