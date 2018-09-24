@@ -1,77 +1,52 @@
 import java.util.*;
 
-class State implements Comparable<State> {
-    private int a, b, c, cost, depth;
+class State{
+    private Queue<Vehicle> vehicles;
+    private int maxWeight,length;
+    private double time;
+    private String Description;
     private State parent;
-    private String description;
-    
-    public State(int a, int b, int c, int cost, int depth, State parent, String description) {
-        this.a = a;
-        this.b = b;
-        this.c = c;
-        this.cost = cost;
-        this.depth = depth;
-        this.parent = parent;
-        this.description = description;
+
+    public State(Queue<Vehicle> cs,int mw,int lth,double t,String d){
+        this.vehicles = cs;
+        this.maxWeight = mw;
+        this.length = lth;
+        this.time = t;
+        this.Description = d;
     }
 
-    public int getCost() {
-        return cost;
-    }
-
-    public State getParent() {
+    public State getParent(){
         return parent;
     }
 
-    public boolean isGoal() {
-        return a == 0 || b == 0 || c == 0;
-    }
+    public ArrayList<State> extend(){
+        ArrayList<Vehicle> group = new ArrayList<>();
+        ArrayList<State> successors= new ArrayList<>();
+        int currentWeight = 0; Vehicle currentCar; int slowest;
 
-    public ArrayList<State> expand() {
-        ArrayList<State> successors = new ArrayList<>();
 
-        if (a >= b) {
-            successors.add(new State(a - b, 2 * b, c, cost + b, depth + 1, this, "A -> B"));
-        }
+        for(int i=0 ;i<vehicles.size() && this.maxWeight < currentWeight ;i++){
 
-        if (a >= c) {
-            successors.add(new State(a - c, b, 2 * c, cost + c, depth + 1, this, "A -> C"));
-        }
 
-        if (b >= a) {
-            successors.add(new State(2 * a, b - a, c, cost + a, depth + 1, this, "B -> A"));
-        }
+            currentCar = vehicles.remove();
+            group.add(currentCar);
+            currentWeight += currentCar.getWeight();
+//            for(i: group){
+//
+//            }
 
-        if (b >= c) {
-            successors.add(new State(a, b - c, 2 * c, cost + c, depth + 1, this, "B-> C"));
-        }
-
-        if (c >= a) {
-            successors.add(new State(2 * a, b, c - a, cost + a, depth + 1, this, "C -> A"));
-        }
-
-        if (c >= b) {
-            successors.add(new State(a, 2 * b, c - b, cost + b, depth + 1, this, "C -> B"));
+//            successors.add(new State(this.cars,this.maxWeight,this.length,/*time*/,/*desc*/));
         }
 
         return successors;
     }
 
-    @Override
-    public String toString() {
-        return String.format("%d, %d, %d: %s [%d, %d]", a, b, c, description, cost, depth);
-    }
-
-    public int compareTo(State other) {
-        return this.getCost() - other.getCost();
-    }
 }
 
 
 
 public class ConvoyUCS {
     public static void main(String[] args) {
-    	ConvoyUCS convoy = new ConvoyUCS();
     	Scanner kbd = new Scanner(System.in);
     	System.out.print("Length of bridge (meters): ");
     	double bridgeLength = kbd.nextDouble();
@@ -80,18 +55,18 @@ public class ConvoyUCS {
     	System.out.print("Number of vehicles in the convoy: ");
     	int numberOfVehicles = kbd.nextInt();
     	
-    	ArrayList<Vehicle> list = new ArrayList<Vehicle>();
+    	Queue<Vehicle> convoy = new LinkedList<Vehicle>();
     	
     	for (int i=1; i<=numberOfVehicles; i++) {
     		System.out.print("weight of vehicle (tonnes) "+i+": ");
     		double weight = kbd.nextDouble();
     		System.out.print("speed of vehicle (meters/minute) "+i+": ");
     		double speed = kbd.nextDouble();
-    		Vehicle v = convoy.new Vehicle(speed, weight);
-    		list.add(v);
+    		Vehicle v = new Vehicle(speed, weight);
+    		convoy.add(v);
     	}
     	
-    	System.out.println(list);
+    	System.out.println(convoy);
 
 //        State initialState = new State(a, b, c, 0, 0, null, "Initial State");
 //
@@ -139,31 +114,32 @@ public class ConvoyUCS {
 //        System.out.printf("Maximum Size of Frontier: %d\n", maxFrontierSize);
 //    }
     
-    class Vehicle{
-        private double speed;
-        private double weight;
-        
-        public Vehicle(){
-            speed = 100;
-            weight = 200;
-        }
-        
-        public Vehicle(double s, double w){
-            this.speed = s;
-            this.weight = w;
-        }
+}
 
-        public double getSpeed(){
-            return this.speed;
-        }
+class Vehicle{
+    private double speed;
+    private double weight;
+    
+    public Vehicle(){
+        speed = 100;
+        weight = 200;
+    }
+    
+    public Vehicle(double s, double w){
+        this.speed = s;
+        this.weight = w;
+    }
 
-        public double getWeight(){
-            return this.weight;
-        }
+    public double getSpeed(){
+        return this.speed;
+    }
 
-        @Override
-        public String toString(){
-            return("vehicle info - Speed : "+getSpeed()+", Weight : "+getWeight());
-        }
+    public double getWeight(){
+        return this.weight;
+    }
+
+    @Override
+    public String toString(){
+        return("vehicle info - Speed : "+getSpeed()+", Weight : "+getWeight());
     }
 }
