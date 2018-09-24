@@ -54,7 +54,7 @@ class State{
         int currentWeight = 0; Car currentCar;
 
 
-        for(;&& this.maxWeight < currentWeight ;){
+        for(;this.maxWeight < currentWeight;){
 
             currentCar = cars.remove();//a car is out from queue
 
