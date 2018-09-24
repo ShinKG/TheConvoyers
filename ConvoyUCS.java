@@ -71,15 +71,27 @@ class State implements Comparable<State> {
 
 public class ConvoyUCS {
     public static void main(String[] args) {
-    	Queue<Object> queue = new LinkedList<>(Arrays.asList(args));
-    	double capacity = Double.parseDouble(args[0]);
-    	queue.remove(); //removes the inputed capacity from the queue
-//    	for (int i=1; i< args.length; i++) {
-//    		System.out.println(queue.peek());
-//    		queue.remove();
-//    	}
+    	ConvoyUCS convoy = new ConvoyUCS();
+    	Scanner kbd = new Scanner(System.in);
+    	System.out.print("Length of bridge (kilometers): ");
+    	double bridgeLength = kbd.nextDouble();
+    	System.out.print("Maximum capacity of bridge (kilograms): ");
+    	double bridgeCapacity = kbd.nextDouble();
+    	System.out.print("Number of vehicles in the convoy: ");
+    	int numberOfVehicles = kbd.nextInt();
     	
-    	System.out.print("Maximum capacity of bridge: "+capacity);
+    	ArrayList<Vehicle> list = new ArrayList<Vehicle>();
+    	
+    	for (int i=1; i<=numberOfVehicles; i++) {
+    		System.out.print("weight of vehicle "+i+": ");
+    		double weight = kbd.nextDouble();
+    		System.out.print("speed of vehicle "+i+": ");
+    		double speed = kbd.nextDouble();
+    		Vehicle v = convoy.new Vehicle(speed, weight);
+    		list.add(v);
+    	}
+    	
+    	System.out.println(list);
 
 //        State initialState = new State(a, b, c, 0, 0, null, "Initial State");
 //
@@ -110,20 +122,48 @@ public class ConvoyUCS {
     }
 
 
-    public static void showSolution(State state, int totalStatesVisited, int maxFrontierSize) {
-        ArrayList<State> path = new ArrayList<>();
-
-        while (state != null) {
-            path.add(0, state);
-            state = state.getParent();
+//    public static void showSolution(State state, int totalStatesVisited, int maxFrontierSize) {
+//        ArrayList<State> path = new ArrayList<>();
+//
+//        while (state != null) {
+//            path.add(0, state);
+//            state = state.getParent();
+//        }
+//
+//        System.out.println("Solution:");
+//        for (State st : path) {
+//            System.out.println(st);
+//        }
+//
+//        System.out.printf("\nTotal States Visited: %d\n", totalStatesVisited);
+//        System.out.printf("Maximum Size of Frontier: %d\n", maxFrontierSize);
+//    }
+    
+    class Vehicle{
+        private double speed;
+        private double weight;
+        
+        public Vehicle(){
+            speed = 100;
+            weight = 200;
+        }
+        
+        public Vehicle(double s, double w){
+            this.speed = s;
+            this.weight = w;
         }
 
-        System.out.println("Solution:");
-        for (State st : path) {
-            System.out.println(st);
+        public double getSpeed(){
+            return this.speed;
         }
 
-        System.out.printf("\nTotal States Visited: %d\n", totalStatesVisited);
-        System.out.printf("Maximum Size of Frontier: %d\n", maxFrontierSize);
+        public double getWeight(){
+            return this.weight;
+        }
+
+        @Override
+        public String toString(){
+            return("vehicle info - Speed : "+getSpeed()+", Weight : "+getWeight());
+        }
     }
 }
