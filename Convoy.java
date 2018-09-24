@@ -71,11 +71,11 @@ class State{
             //finder of slower
             int slow = 0;
             for(int i=0;i<group.size();i++){
-                if (group.get(i).getSpeed()<slow) slow = group.get(i).getspeed;
+                if (group.get(i).getSpeed()<slow) slow = group.get(i).getSpeed();
             }
 
-            //preprocess
-            double time += this.length/slow;// length divided by speed is time in h this will be
+            //preprcss
+            double time += (double)this.length/slow;// length divided by speed is time in h this will be
 
             successors.add(new State(this.cars,this.maxWeight,this.length,time,des));
             }
