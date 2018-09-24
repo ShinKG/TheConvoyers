@@ -73,9 +73,9 @@ public class ConvoyUCS {
     public static void main(String[] args) {
     	ConvoyUCS convoy = new ConvoyUCS();
     	Scanner kbd = new Scanner(System.in);
-    	System.out.print("Length of bridge (kilometers): ");
+    	System.out.print("Length of bridge (meters): ");
     	double bridgeLength = kbd.nextDouble();
-    	System.out.print("Maximum capacity of bridge (kilograms): ");
+    	System.out.print("Maximum capacity of bridge (tonnes): ");
     	double bridgeCapacity = kbd.nextDouble();
     	System.out.print("Number of vehicles in the convoy: ");
     	int numberOfVehicles = kbd.nextInt();
@@ -83,9 +83,9 @@ public class ConvoyUCS {
     	ArrayList<Vehicle> list = new ArrayList<Vehicle>();
     	
     	for (int i=1; i<=numberOfVehicles; i++) {
-    		System.out.print("weight of vehicle "+i+": ");
+    		System.out.print("weight of vehicle (tonnes) "+i+": ");
     		double weight = kbd.nextDouble();
-    		System.out.print("speed of vehicle "+i+": ");
+    		System.out.print("speed of vehicle (meters/minute) "+i+": ");
     		double speed = kbd.nextDouble();
     		Vehicle v = convoy.new Vehicle(speed, weight);
     		list.add(v);
