@@ -1,17 +1,14 @@
 import java.util.*;
 
-class State{
+class State extends ConvoyUCS{
     private Queue<Vehicle> vehicles;
-    private int maxWeight,length;
+//    private double maxWeight,length;
     private double time;
     private String Description;
     private State parent;
 
-    public State(Queue<Vehicle> cs,int mw,int lth,double t,String d){
+    public State(Queue<Vehicle> cs, String d){
         this.vehicles = cs;
-        this.maxWeight = mw;
-        this.length = lth;
-        this.time = t;
         this.Description = d;
     }
 
@@ -22,10 +19,12 @@ class State{
     public ArrayList<State> extend(){
         ArrayList<Vehicle> group = new ArrayList<>();
         ArrayList<State> successors= new ArrayList<>();
-        int currentWeight = 0; Vehicle currentCar; int slowest;
+        int currentWeight = 0;
+        Vehicle currentCar;
+        int slowest;
 
 
-        for(int i=0 ;i<vehicles.size() && this.maxWeight < currentWeight ;i++){
+        for(int i=0 ;i<vehicles.size() && this.bridgeCapacity < currentWeight ;i++){
 
 
             currentCar = vehicles.remove();
@@ -46,12 +45,14 @@ class State{
 
 
 public class ConvoyUCS {
+	public static double bridgeLength;
+	public static double bridgeCapacity;
     public static void main(String[] args) {
     	Scanner kbd = new Scanner(System.in);
     	System.out.print("Length of bridge (meters): ");
-    	double bridgeLength = kbd.nextDouble();
+    	bridgeLength = kbd.nextDouble();
     	System.out.print("Maximum capacity of bridge (tonnes): ");
-    	double bridgeCapacity = kbd.nextDouble();
+    	bridgeCapacity = kbd.nextDouble();
     	System.out.print("Number of vehicles in the convoy: ");
     	int numberOfVehicles = kbd.nextInt();
     	
@@ -68,13 +69,13 @@ public class ConvoyUCS {
     	
     	System.out.println(convoy);
 
-//        State initialState = new State(a, b, c, 0, 0, null, "Initial State");
+        State initialState = new State(convoy, "Initial State" );
+
+        PriorityQueue<State> frontier = new PriorityQueue<>();
+        frontier.add(initialState);
 //
-//        PriorityQueue<State> frontier = new PriorityQueue<>();
-//        frontier.add(initialState);
-//
-//        int totalStatesVisited = 0;
-//        int maxFrontierSize = 1;
+        int totalStatesVisited = 0;
+        int maxFrontierSize = 1;
 //
 //        while (frontier.size() > 0) {
 //            State currentState = frontier.remove();
@@ -97,28 +98,29 @@ public class ConvoyUCS {
     }
 
 
-//    public static void showSolution(State state, int totalStatesVisited, int maxFrontierSize) {
-//        ArrayList<State> path = new ArrayList<>();
-//
-//        while (state != null) {
-//            path.add(0, state);
-//            state = state.getParent();
-//        }
-//
-//        System.out.println("Solution:");
-//        for (State st : path) {
-//            System.out.println(st);
-//        }
-//
-//        System.out.printf("\nTotal States Visited: %d\n", totalStatesVisited);
-//        System.out.printf("Maximum Size of Frontier: %d\n", maxFrontierSize);
-//    }
+    public static void showSolution(State state, int totalStatesVisited, int maxFrontierSize) {
+        ArrayList<State> path = new ArrayList<>();
+
+        while (state != null) {
+            path.add(0, state);
+            state = state.getParent();
+        }
+
+        System.out.println("Solution:");
+        for (State st : path) {
+            System.out.println(st);
+        }
+
+        System.out.printf("\nTotal States Visited: %d\n", totalStatesVisited);
+        System.out.printf("Maximum Size of Frontier: %d\n", maxFrontierSize);
+    }
     
 }
 
-class Vehicle{
+class Vehicle extends ConvoyUCS{
     private double speed;
     private double weight;
+    private double time;
     
     public Vehicle(){
         speed = 100;
@@ -128,6 +130,7 @@ class Vehicle{
     public Vehicle(double s, double w){
         this.speed = s;
         this.weight = w;
+        time = bridgeLength/s;
     }
 
     public double getSpeed(){
@@ -137,9 +140,13 @@ class Vehicle{
     public double getWeight(){
         return this.weight;
     }
+    
+    public double getTime(){
+        return this.time;
+    }
 
     @Override
     public String toString(){
-        return("vehicle info - Speed : "+getSpeed()+", Weight : "+getWeight());
+        return("vehicle info - Speed : "+getSpeed()+", Weight : "+getWeight()+", Time : "+time);
     }
 }
