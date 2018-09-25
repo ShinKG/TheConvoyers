@@ -42,7 +42,7 @@ public class Convoy {
                 return;
 
             } else {
-                ArrayList<State> successorStates = currentState.expand();
+                ArrayList<State> successorStates = currentState.extend();
 
                 for (State state : successorStates) {
                     if (seen.indexOf(state) == -1) {
@@ -121,7 +121,7 @@ class State{
         return parent;
     }
 
-    public ArrayList<State> expand(){
+    public ArrayList<State> extend(){
         ArrayList<Car> group = new ArrayList<>();
         ArrayList<State> successors= new ArrayList<>();
         int currentWeight = 0; Car currentCar;
